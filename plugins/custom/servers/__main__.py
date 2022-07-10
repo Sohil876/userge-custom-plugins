@@ -1,0 +1,39 @@
+# Based on http://git.aqendo.eu.org/aqendo/hax_woiden_checker_python
+# By @Sohil876
+""" Lists available servers on hax and woiden """
+
+from aiohttp import ClientSession
+from bs4 import BeautifulSoup
+from userge import userge, Message #get_collection, config
+
+
+user_agent = {
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 OPR/72.0.3815.465 (Edition Yx GX)",
+}
+workers_url="cors.eu.org"
+
+async def grab(host="hax.co.id"):
+    async with ClientSession() as session:
+        async with session.get(f"https://{workers_url}/https://{host}/create-vps", headers=user_agent) as response:
+            if response.status != 200: return f"Something went wrong, aiohttp could not connect to server. Error Code: {response.status}"
+            a = await response.text()
+            soup = BeautifulSoup(a, "html.parser")
+            founds = soup.find(id="datacenter").find_all("option")[1:]
+            result = ""
+            if len(founds) == 0:
+                return "No free seats, check back later."
+            for i in founds:
+                result += f"{i.text}\n"
+            return result
+
+
+@userge.on_cmd(
+    "servers",
+    about={
+        "header": "Lists available servers on hax and woiden",
+        "usage": "{tr}servers",
+    },
+)
+async def servers_(message: Message):
+    await message.edit("Fetching info...")  # this will be automatically deleted after 5 sec
+    await message.edit("Hax.co.id:\n" + (await grab(host="hax.co.id")) + "\n\n" + "Woiden.id:\n" + (await grab(host="woiden.id")))

@@ -1,5 +1,4 @@
-# Custom-Plugins
+### Userge Custom Plugins
 
-Custom Plugins for Userge
-
-### Only the `plugins` directory will be used !!! 
+### My Custom Plugins repo for userge.
+-  Do `.addrepo https://github.com/Sohil876/userge-custom-plugins` to add this repo to userge bot.
