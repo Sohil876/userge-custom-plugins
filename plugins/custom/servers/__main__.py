@@ -1,6 +1,7 @@
+""" Lists available servers on hax and woiden """
+
 # Based on http://git.aqendo.eu.org/aqendo/hax_woiden_checker_python
 # By @Sohil876
-""" Lists available servers on hax and woiden """
 
 from aiohttp import ClientSession
 from bs4 import BeautifulSoup
@@ -12,17 +13,16 @@ user_agent = {
 }
 workers_url="cors.eu.org"
 
-async def grab(host="hax.co.id"):
+async def grab(host):
     async with ClientSession() as session:
         async with session.get(f"https://{workers_url}/https://{host}/create-vps", headers=user_agent) as response:
             if response.status != 200: return f"Something went wrong, aiohttp could not connect to server. Error Code: {response.status}"
-            a = await response.text()
-            soup = BeautifulSoup(a, "html.parser")
-            founds = soup.find(id="datacenter").find_all("option")[1:]
+            soup = BeautifulSoup(await response.text(), "html.parser")
+            found = soup.find(id="datacenter").find_all("option")[1:]
             result = ""
-            if len(founds) == 0:
+            if len(found) == 0:
                 return "No free seats, check back later."
-            for i in founds:
+            for i in found:
                 result += f"{i.text}\n"
             return result
 
@@ -35,5 +35,5 @@ async def grab(host="hax.co.id"):
     },
 )
 async def servers_(message: Message):
-    await message.edit("Fetching info...")  # this will be automatically deleted after 5 sec
-    await message.edit("Hax.co.id:\n" + (await grab(host="hax.co.id")) + "\n\n" + "Woiden.id:\n" + (await grab(host="woiden.id")))
+    await message.edit("Fetching info...")
+    await message.edit("Hax.co.id:\n" + (await grab(host="hax.co.id")) + "\n\n" + "Woiden.id:\n" + (await grab(host="woiden.id")), del_in=20, disable_web_page_preview=True)
