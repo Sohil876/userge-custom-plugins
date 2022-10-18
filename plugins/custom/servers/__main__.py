@@ -11,11 +11,11 @@ from userge import userge, Message #get_collection, config
 user_agent = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 OPR/72.0.3815.465 (Edition Yx GX)",
 }
-workers_url="seep.eu.org"
+workers_url="https://seep.eu.org"
 
 async def grab(host):
     async with ClientSession() as session:
-        async with session.get(f"https://{workers_url}/https://{host}/create-vps", headers=user_agent) as response:
+        async with session.get(f"{workers_url}/{host}/create-vps", headers=user_agent) as response:
             if response.status != 200: return f"Something went wrong, aiohttp could not connect to server. Error Code: {response.status}"
             soup = BeautifulSoup(await response.text(), "html.parser")
             found = soup.find(id="datacenter").find_all("option")[1:]
@@ -36,4 +36,6 @@ async def grab(host):
 )
 async def servers_(message: Message):
     await message.edit("Fetching info...")
-    await message.edit("Hax.co.id:\n" + (await grab(host="hax.co.id")) + "\n\n" + "Woiden.id:\n" + (await grab(host="woiden.id")), del_in=20, disable_web_page_preview=True)
+    hservers = await grab(host="https://hax.co.id")
+    wservers = await grab(host="https://woiden.id")
+    await message.edit("Hax.co.id:\n" + hservers + "\n\n" + "Woiden.id:\n" + wservers, del_in=25, disable_web_page_preview=True)
