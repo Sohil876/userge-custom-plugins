@@ -34,15 +34,15 @@ async def gen_links(page_url, base_url):
             # Generate real urls
             for idx, item in enumerate(data):
                 if "1920x1080" in item:
-                    msg = msg + f"<a href={base_url + data[idx + 1]}>  * 1920x1080 (1080p):</a>\n"
+                    msg = msg + f"  * <a href={base_url + data[idx + 1]}>1920x1080 (1080p)</a>:\n"
                 if "1280x720" in item:
-                    msg = msg + f"<a href={base_url + data[idx + 1]}>  * 1280x720 (720p):</a>\n"
+                    msg = msg + f"  * <a href={base_url + data[idx + 1]}>1280x720 (720p)</a>:\n"
                 if "640x360" in item:
-                    msg = msg + f"<a href={base_url + data[idx + 1]}>  * 640x360:</a>\n"
+                    msg = msg + f"  * <a href={base_url + data[idx + 1]}>640x360</a>:\n"
                 if "480x270" in item:
-                    msg = msg + f"<a href={base_url + data[idx + 1]}>  * 480x270:</a>\n"
+                    msg = msg + f"  * <a href={base_url + data[idx + 1]}>480x270</a>:\n"
                 if "320x180" in item:
-                    msg = msg + f"<a href={base_url + data[idx + 1]}>  * 320x180:</a>\n"
+                    msg = msg + f"  * <a href={base_url + data[idx + 1]}>320x180</a>:\n"
             return msg
 
 
