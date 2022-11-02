@@ -23,7 +23,7 @@ async def gen_data(page_url):
             soup = soup.find("div", {"class": "vdo-ct"})
             soup = soup.find("source")
             soup = soup["src"]
-            base_url = soup.split("master", 1)[0]
+            base_url = f"https://iptvcdn.fastdl.in/t/fp/{soup.split('=ch', 1)[1]}/"
             return soup, base_url
 
 async def gen_links(page_url, base_url):
