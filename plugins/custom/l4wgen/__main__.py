@@ -11,11 +11,12 @@ from userge import userge, Message
 user_agent = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 OPR/72.0.3815.465 (Edition Yx GX)",
 }
+workers_url = "https://seep.eu.org" # "cors.eu.org"
 
 
 async def gen_data(page_url):
     async with ClientSession() as session:
-        async with session.get(f"{page_url}", headers=user_agent) as response:
+        async with session.get(f"{workers_url}/{page_url}", headers=user_agent) as response:
             if response.status != 200: return f"Something went wrong, aiohttp could not connect to server. Error Code: {response.status}"
             soup = BeautifulSoup(await response.text(), "html.parser")
             soup = soup.find("div", {"class": "vdo-ct"})
@@ -26,7 +27,7 @@ async def gen_data(page_url):
 
 async def gen_links(page_url, base_url):
     async with ClientSession() as session:
-        async with session.get(f"{page_url}", headers=user_agent) as response:
+        async with session.get(f"{workers_url}/{page_url}", headers=user_agent) as response:
             if response.status != 200: return f"Something went wrong, aiohttp could not connect to server. Error Code: {response.status}"
             soup = BeautifulSoup(await response.text(), "html.parser")
             data = soup.text.split('\n')
