@@ -2,7 +2,7 @@
 
 # By @Sohil876
 
-from aiohttp import ClientSession
+from aiohttp import ClientSession, TCPConnector
 from bs4 import BeautifulSoup
 from pyrogram.enums import ParseMode
 from userge import userge, Message
@@ -16,7 +16,7 @@ user_agent = {
 
 
 async def gen_data(page_url):
-    async with ClientSession() as session:
+    async with ClientSession(connector=TCPConnector(ssl=False)) as session:
         async with session.get(f"{page_url}", headers=user_agent) as response:
             if response.status != 200: return f"Something went wrong, aiohttp could not connect to server. Error Code: {response.status}"
             soup = BeautifulSoup(await response.text(), "html.parser")
@@ -27,7 +27,7 @@ async def gen_data(page_url):
             return soup, base_url
 
 async def gen_links(page_url, base_url):
-    async with ClientSession() as session:
+    async with ClientSession(connector=TCPConnector(ssl=False)) as session:
         async with session.get(f"{page_url}", headers=user_agent) as response:
             if response.status != 200: return f"Something went wrong, aiohttp could not connect to server. Error Code: {response.status}"
             soup = BeautifulSoup(await response.text(), "html.parser")
