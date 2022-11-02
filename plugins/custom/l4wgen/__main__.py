@@ -7,15 +7,18 @@ from bs4 import BeautifulSoup
 from pyrogram.enums import ParseMode
 from userge import userge, Message
 
+async def get_requests(url):
+    page = await get(url)
+    return page
 
 async def gen_links(page_url):
-    page = get(page_url)
+    page = await get_requests(page_url)
     soup = BeautifulSoup(page.text, "html.parser")
     soup = soup.find("div", {"class": "vdo-ct"})
     soup = soup.find("source")
     soup = soup["src"]
     base_url = soup.split("master", 1)[0]
-    url = get(soup)
+    url = await get_requests(soup)
     data = url.text.split('\n')
     msg = "<strong>Generated Links:</strong>\n"
     # Generate real urls
