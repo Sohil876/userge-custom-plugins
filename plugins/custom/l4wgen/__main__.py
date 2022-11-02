@@ -26,25 +26,25 @@ async def gen_data(page_url):
             base_url = f"https://iptvcdn.fastdl.in/t/fp/{soup.split('=ch', 1)[1]}/"
             return soup, base_url
 
-async def gen_links(page_url, base_url):
+async def gen_links(page_url, base_url, source_url):
     async with ClientSession(connector=TCPConnector(ssl=False)) as session:
         async with session.get(f"{page_url}", headers=user_agent) as response:
             if response.status != 200: return f"Something went wrong, aiohttp could not connect to server. Error Code: {response.status}"
             soup = BeautifulSoup(await response.text(), "html.parser")
             data = soup.text.split('\n')
-            msg = "<strong>Generated Links:</strong>\n"
+            msg = f"<strong>Generated links for <a href={source_url}>[source]</a></strong>:\n"
             # Generate real urls
             for idx, item in enumerate(data):
                 if "1920x1080" in item:
-                    msg = msg + f"  * <a href={base_url + data[idx + 1]}>1920x1080 (1080p)</a>:\n"
+                    msg = msg + f"* <a href={base_url + data[idx + 1]}>1920x1080 (1080p)</a>\n"
                 if "1280x720" in item:
-                    msg = msg + f"  * <a href={base_url + data[idx + 1]}>1280x720 (720p)</a>:\n"
+                    msg = msg + f"* <a href={base_url + data[idx + 1]}>1280x720 (720p)</a>\n"
                 if "640x360" in item:
-                    msg = msg + f"  * <a href={base_url + data[idx + 1]}>640x360</a>:\n"
+                    msg = msg + f"* <a href={base_url + data[idx + 1]}>640x360</a>\n"
                 if "480x270" in item:
-                    msg = msg + f"  * <a href={base_url + data[idx + 1]}>480x270</a>:\n"
+                    msg = msg + f"* <a href={base_url + data[idx + 1]}>480x270</a>\n"
                 if "320x180" in item:
-                    msg = msg + f"  * <a href={base_url + data[idx + 1]}>320x180</a>:\n"
+                    msg = msg + f"* <a href={base_url + data[idx + 1]}>320x180</a>\n"
             return msg
 
 
@@ -65,5 +65,5 @@ async def l4wgen_(message: Message):
         return
     await message.edit("Generating links ...")
     url, base_url = await gen_data(page_url=arg_url)
-    msg = await gen_links(page_url=url, base_url=base_url)
+    msg = await gen_links(page_url=url, base_url=base_url, source_url=arg_url)
     await message.edit(msg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
