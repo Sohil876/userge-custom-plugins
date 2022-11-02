@@ -9,13 +9,13 @@ from userge import userge, Message
 
 
 async def gen_links(page_url):
-    page = await get(page_url)
+    page = get(page_url)
     soup = BeautifulSoup(page.text, "html.parser")
     soup = soup.find("div", {"class": "vdo-ct"})
     soup = soup.find("source")
     soup = soup["src"]
     base_url = soup.split("master", 1)[0]
-    url = await get(soup)
+    url = get(soup)
     data = url.text.split('\n')
     msg = "<strong>Generated Links:</strong>\n"
     # Generate real urls
