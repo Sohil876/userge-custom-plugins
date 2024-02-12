@@ -1,6 +1,6 @@
 """ Lists available servers on hax and woiden """
 
-# Based on http://git.aqendo.eu.org/aqendo/hax_woiden_checker_python
+# Initial version was based on python version of https://github.com/Aqendo/telegram_hax_woiden_bot
 # By @Sohil876
 
 from aiohttp import ClientSession
@@ -8,7 +8,8 @@ from bs4 import BeautifulSoup
 from userge import userge, Message  # get_collection, config
 
 
-workers_url = "https://seep.eu.org"
+cors_worker_url = "https://cors.eu.org"
+seep_worker_url = "https://seep.eu.org"
 
 
 async def grab(host):
