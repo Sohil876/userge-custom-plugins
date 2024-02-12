@@ -14,9 +14,9 @@ workers_url = "https://seep.eu.org"
 async def grab(host):
     async with ClientSession() as session:
         async with session.get(
-            f"{workers_url}/{host}/create-vps",
+            f"{host}/create-vps",
             headers={
-                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36 OPR/72.0.3815.465 (Edition Yx GX)",
+                "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
                 "Referer": f"{host}",
             },
         ) as response:
